@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Trade Application</string>
+    <string name="menu_home">홈</string>
+    <string name="menu_chatList">채팅</string>
+    <string name="menu_myPage">마의페이지</string>
+    <string name="homeTitle">중고거래</string>
+
+
+</resources>
