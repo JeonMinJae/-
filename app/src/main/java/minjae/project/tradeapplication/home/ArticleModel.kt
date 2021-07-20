@@ -8,6 +8,7 @@ data class ArticleModel(
     val imageUrl: String
 ) {
 
-    //constructor(): this("", "", 0, "", "")
+    //firebase realtime db사용하기위해서 default가 필요하다.
+    constructor(): this("", "", 0, "", "")
 
 }

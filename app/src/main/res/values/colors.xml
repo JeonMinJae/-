@@ -10,5 +10,6 @@
 
     <color name="gray">#cccc</color>
     <color name="gray_c">#ececec</color>
+    <color name="orange">#f27f35</color>
 
 </resources>
