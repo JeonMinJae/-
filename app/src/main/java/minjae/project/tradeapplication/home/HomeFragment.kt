@@ -14,8 +14,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import minjae.project.tradeapplication.DBKey.Companion.CHILD_CHAT
 import minjae.project.tradeapplication.DBKey.Companion.DB_ARTICLES
+import minjae.project.tradeapplication.DBKey.Companion.DB_USERS
 import minjae.project.tradeapplication.R
+import minjae.project.tradeapplication.chatlist.ChatListItem
 import minjae.project.tradeapplication.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -24,6 +27,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var binding: FragmentHomeBinding? = null
     private lateinit var articleAdapter : ArticleAdapter
     private lateinit var articleDB : DatabaseReference
+    private lateinit var userDB: DatabaseReference
 
     private val articleList = mutableListOf<ArticleModel>()
     private val listener = object : ChildEventListener{
@@ -57,9 +61,49 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         articleList.clear() // 뷰만 초기화된거지 홈프레그먼트가 초기화되지 않으면 계속 데이터가 쌓이기때문에 해줘야한다.
 
+        //초기화
         articleDB = Firebase.database.reference.child(DB_ARTICLES)
+        userDB = Firebase.database.reference.child(DB_USERS)
 
-        articleAdapter = ArticleAdapter()
+        articleAdapter = ArticleAdapter(onItemClicked = { articleModel ->
+            if (auth.currentUser != null) {
+                // 로그인을 한 상태
+                if (auth.currentUser.uid != articleModel.sellerId) {
+
+                    val chatRoom = ChatListItem(
+                        buyerId = auth.currentUser.uid,
+                        sellerId = articleModel.sellerId,
+                        itemTitle = articleModel.title,
+                        key = System.currentTimeMillis()
+                    )
+
+                    userDB.child(auth.currentUser.uid)
+                        .child(CHILD_CHAT)
+                        .push()
+                        .setValue(chatRoom)
+
+                    userDB.child(articleModel.sellerId)
+                        .child(CHILD_CHAT)
+                        .push()
+                        .setValue(chatRoom)
+
+
+                    Snackbar.make(view, "채팅방이 생성되었습니다. 채팅탭에서 확인해주세요.", Snackbar.LENGTH_LONG).show()
+
+
+                } else {
+                    // 내가 올린 아이템
+                    Snackbar.make(view, "내가 올린 아이템입니다", Snackbar.LENGTH_LONG).show()
+                }
+            } else {
+                // 로그인을 안한 상태
+                Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
+            }
+
+
+
+
+        })
         //밑에는 파일을 넣기전에 작동 되는지 모르기 때문에 임의로 넣어준 코드이다.
         /*articleAdapter.submitList(mutableListOf<ArticleModel>()
             .apply {
@@ -73,15 +117,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         fragmentHomeBinding.articleRecyclerView.adapter = articleAdapter
 
         fragmentHomeBinding.addFloatingButton.setOnClickListener{
-            val intent = Intent(requireContext(), AddArticleActivity::class.java) //프레그먼트라 this 불가해서 require사용
-            startActivity(intent)
-            /*//todo 로그인 기능 구현후 사용
             if(auth.currentUser != null) {
                 val intent = Intent(requireContext(), AddArticleActivity::class.java) //프레그먼트라 this 불가해서 require사용
                 startActivity(intent)
             } else{
                 Snackbar.make(view, "로그인후 사용해주세요", Snackbar.LENGTH_LONG).show()
-            }*/
+            }
         }
 
         //addChildEventListener는 한번 등록하면 이벤트 발생할때마다 등록된다.

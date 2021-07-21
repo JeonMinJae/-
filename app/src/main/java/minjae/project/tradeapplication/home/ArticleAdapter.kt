@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 //ListaAdapter 임폴트시 android인지 androidx.recyclerview인지 잘 봐라
-class ArticleAdapter: ListAdapter<ArticleModel, ArticleAdapter.ViewHolder>(diffUtil) {
+class ArticleAdapter(val onItemClicked: (ArticleModel)-> Unit): ListAdapter<ArticleModel, ArticleAdapter.ViewHolder>(diffUtil) {
 
     //앞에있는 val binding에 root를 주어서 뷰를 초기화해준다. inner클래스는 클래스안에 있는 클래스라는 의미
     //gradle에서 바인딩을 활성화했기 때문에  ItemArticleBinding 명은 xml의 item_article에다가 뒤에 binding이 추가된것이다.
@@ -32,6 +32,10 @@ class ArticleAdapter: ListAdapter<ArticleModel, ArticleAdapter.ViewHolder>(diffU
                 Glide.with(binding.thumbnailImageView)
                     .load(articleModel.imageUrl)
                     .into(binding.thumbnailImageView)
+            }
+            //root는 한 항목 전체
+            binding.root.setOnClickListener{
+                onItemClicked(articleModel)
             }
         }
     }
