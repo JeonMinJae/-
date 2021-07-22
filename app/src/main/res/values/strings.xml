@@ -5,5 +5,19 @@
     <string name="menu_myPage">마의페이지</string>
     <string name="homeTitle">중고거래</string>
 
+    <string name="image_preview">이미지 미리보기</string>
+    <string name="flash">플래시</string>
+    <string name="delete">삭제</string>
+    <string name="images_page">(%d/%d)</string>
+    <string name="confirm">확인</string>
+    <string name="feed">피드</string>
+    <string name="add_feed">피드 등록</string>
+    <string name="article_title">글 제목</string>
+    <string name="feed_content">피드 내용</string>
+    <string name="send_message">전송</string>
+    <string name="chat_room_list">채팅방 리스트</string>
+    <string name="sign_up">회원가입</string>
+    <string name="login">로그인</string>
+
 
 </resources>

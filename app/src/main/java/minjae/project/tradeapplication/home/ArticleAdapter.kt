@@ -25,12 +25,12 @@ class ArticleAdapter(val onItemClicked: (ArticleModel)-> Unit): ListAdapter<Arti
 
             binding.titleTextView.text = articleModel.title
             binding.dateTextView.text = format.format(date).toString()
-            binding.priceTextView.text = articleModel.price
+            binding.priceTextView.text = articleModel.content
 
             //glide사용 하는데 if는 이미지를 안올리는 경우가 있을수 있어서
-            if (articleModel.imageUrl.isNotEmpty()) {
+            if (articleModel.imageUrlList.isNotEmpty()) {
                 Glide.with(binding.thumbnailImageView)
-                    .load(articleModel.imageUrl)
+                    .load(articleModel.imageUrlList.first())
                     .into(binding.thumbnailImageView)
             }
             //root는 한 항목 전체
