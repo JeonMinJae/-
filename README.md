@@ -1,4 +1,4 @@
-# Shopping - 쇼핑앱
+# Used-Trade - 중고거래
 
 # 아키텍처
 
